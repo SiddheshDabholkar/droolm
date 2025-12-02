@@ -7,7 +7,7 @@
     "tsbuild": "tsc",
     "tsbuild-dev": "tsc -w",
     "dev": "node --watch --env-file=.env build/server.js",
-    "start": "node --env-file=.env build/server.js"
+    "start": "node build/server.js"
   },
   "keywords": [],
   "author": "",
