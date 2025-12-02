@@ -19,4 +19,4 @@ const matchSchema = new Schema(
   }
 );
 
-export const Math = model(Schemas.MATCH, matchSchema);
+export const Match = model(Schemas.MATCH, matchSchema);
