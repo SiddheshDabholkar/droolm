@@ -21,4 +21,4 @@ const likeDislikeSchema = new Schema(
   { timestamps: true }
 );
 
-export const LikeDislike = model(Schemas.OTP, likeDislikeSchema);
+export const LikeDislike = model(Schemas.LIKE_DISLIKE, likeDislikeSchema);

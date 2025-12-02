@@ -7,24 +7,35 @@ import { Match } from "../models/match";
 const handleLikeDislike = async (req: Request, res: Response) => {
   const userDetails = req.user as UserType;
   const { isLiked, userId } = req.body;
-  const isLikedType = isLiked === "true";
-  const createdEntry = await LikeDislike.create({
-    forUserId: userId,
-    isLiked: isLikedType,
-    byUserId: userDetails._id,
-  });
-  if (isLikedType) {
+
+  const existingEntry = await LikeDislike.findOneAndUpdate(
+    {
+      forUserId: userId,
+      byUserId: userDetails._id,
+    },
+    {
+      forUserId: userId,
+      isLike: isLiked,
+      byUserId: userDetails._id,
+    },
+    {
+      upsert: true,
+      new: true,
+    }
+  );
+
+  if (isLiked) {
     const hasUserLiked = await LikeDislike.findOne({
       forUserId: userDetails._id,
       byUserId: userId,
-      isLiked: true,
+      isLike: isLiked,
     });
     if (hasUserLiked) {
       const matchCreation = await Match.create({
         userOne: userId,
-        userTwo: userDetails._id,
+        userSecond: userDetails._id,
       });
-      return res.json(201).json(
+      return res.status(201).send(
         formatRes({
           data: matchCreation,
           message: "Match created successfully",
@@ -33,9 +44,9 @@ const handleLikeDislike = async (req: Request, res: Response) => {
       );
     }
   }
-  return res.json(201).json(
+  return res.status(201).send(
     formatRes({
-      data: createdEntry,
+      data: existingEntry,
       message: "Progress stored successfully",
       isError: false,
     })
@@ -45,14 +56,13 @@ const handleLikeDislike = async (req: Request, res: Response) => {
 const getLikedDisLiked = async (req: Request, res: Response) => {
   const userDetails = req.user as UserType;
   const { isLike } = req.query;
-  const isLikeType = isLike === "true";
 
   const likedDisliked = await LikeDislike.find({
     byUserId: userDetails._id,
-    isLiked: isLikeType,
+    isLike,
   }).populate("forUserId");
 
-  return res.json(200).json(
+  return res.status(200).send(
     formatRes({
       data: likedDisliked,
       message: "Liked/Disliked users fetched successfully",
