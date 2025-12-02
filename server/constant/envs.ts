@@ -5,4 +5,12 @@ const ENVS = {
   MONGODB_URL: process.env.MONGODB_URL,
 };
 
-export { ENVS };
+const AWS = {
+  BUCKET_NAME: process.env.BUCKET_NAME!,
+  DEFAULT_REGION: process.env.DEFAULT_REGION!,
+  ACCESS_KEY_ID: process.env.ACCESS_KEY_ID!,
+  SECRET_ACCESS_KEY: process.env.SECRET_ACCESS_KEY!,
+  CLOUDFRONT: process.env.CLOUDFRONT!,
+};
+
+export { ENVS, AWS };
