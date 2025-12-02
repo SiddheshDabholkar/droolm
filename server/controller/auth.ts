@@ -1,3 +1,4 @@
+import { Preference } from "../models/preference";
 import { formatRes } from "../utils/formatRes";
 import { getUserDetails } from "../utils/google";
 import { generateToken } from "../utils/token";
@@ -66,10 +67,14 @@ const register = async (req: Request, res: Response) => {
   const { token } = generateToken({
     userId: String(createdUser._id),
   });
+  const createdPreference = await Preference.create({
+    userId: createdUser._id,
+  });
   const updatedUser = await User.findOneAndUpdate(
     {
       emailId: email,
       googleId,
+      preferenceId: createdPreference._id,
     },
     {
       token,

@@ -4,4 +4,7 @@ enum GENDERS {
   OTHER = "other",
 }
 
-export { GENDERS };
+const MAX_DISTANCE_KM = 30;
+const METERS_PER_KM = 1000;
+
+export { GENDERS, MAX_DISTANCE_KM, METERS_PER_KM };

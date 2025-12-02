@@ -16,11 +16,38 @@ const getUser = async (req: Request, res: Response) => {
 
 const updateUser = async (req: Request, res: Response) => {
   const userDetails = req.user as UserType;
-  const { fullName, gender, profilePictureUrl, phoneNumber } = req.body;
+  const {
+    fullName,
+    gender,
+    profilePictureUrl,
+    phoneNumber,
+    age,
+    latitude,
+    longitude,
+  } = req.body;
+
+  const updateData: Record<string, unknown> = {
+    fullName,
+    gender,
+    profilePictureUrl,
+    phoneNumber,
+    age,
+  };
+
+  // Update location if both latitude and longitude are provided
+  if (latitude !== undefined && longitude !== undefined) {
+    updateData.location = {
+      type: "Point",
+      coordinates: [parseFloat(longitude), parseFloat(latitude)],
+    };
+  }
+
   const updatedUser = await User.findByIdAndUpdate(
     userDetails._id,
-    { fullName, gender, profilePictureUrl, phoneNumber },
-    { new: true }
+    updateData,
+    {
+      new: true,
+    }
   );
   return res.status(200).json(
     formatRes({
