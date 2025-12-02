@@ -22,6 +22,14 @@ app.use(limiter);
 app.use("/api", routes);
 app.use(errorMiddleware);
 
-app.listen(ENVS.PORT, () => {
-  console.log(`Server listening on port ${ENVS.PORT}`);
-});
+mongoose
+  .connect(ENVS.MONGODB_URL!)
+  .then(() => {
+    console.log("Connected to MongoDB");
+    app.listen(ENVS.PORT, () => {
+      console.log("Listening on port", ENVS.PORT);
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });

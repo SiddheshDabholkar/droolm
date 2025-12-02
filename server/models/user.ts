@@ -1,8 +1,9 @@
 import { Schema, model } from "mongoose";
 import { Schemas } from "../constant/schemas";
 import { GENDERS } from "../constant/common";
+import { UserType } from "../types/models";
 
-const userSchema = new Schema(
+const userSchema = new Schema<UserType>(
   {
     emailId: {
       type: String,
@@ -33,6 +34,10 @@ const userSchema = new Schema(
       type: String,
     },
     isOnline: {
+      type: Boolean,
+      default: false,
+    },
+    isPhoneVerified: {
       type: Boolean,
       default: false,
     },
