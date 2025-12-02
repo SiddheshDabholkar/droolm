@@ -3,6 +3,7 @@ import { formatRes } from "../utils/formatRes";
 import { UserType } from "../types/models";
 import { LikeDislike } from "../models/likeDislike";
 import { Match } from "../models/match";
+import { sendMatchNotification } from "../utils/firebaseNotification";
 
 const handleLikeDislike = async (req: Request, res: Response) => {
   const userDetails = req.user as UserType;
@@ -35,6 +36,13 @@ const handleLikeDislike = async (req: Request, res: Response) => {
         userOne: userId,
         userSecond: userDetails._id,
       });
+
+      await sendMatchNotification({
+        userOneId: userId,
+        userTwoId: userDetails._id.toString(),
+        matchId: matchCreation._id.toString(),
+      });
+
       return res.status(201).send(
         formatRes({
           data: matchCreation,
