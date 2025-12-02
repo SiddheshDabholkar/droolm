@@ -21,7 +21,6 @@ const userSchema = new Schema<UserType>(
     },
     token: {
       type: String,
-      required: false,
     },
     gender: {
       type: String,
@@ -48,22 +47,11 @@ const userSchema = new Schema<UserType>(
       type: Schema.Types.ObjectId,
       ref: Schemas.PREFERENCE,
     },
-    location: {
-      type: {
-        type: String,
-        enum: ["Point"],
-        default: "Point",
-      },
-      coordinates: {
-        type: [Number], // [longitude, latitude]
-        default: [0, 0],
-      },
+    dateOfBirth: {
+      type: Date,
     },
   },
   { timestamps: true }
 );
-
-// Create 2dsphere index for geospatial queries
-userSchema.index({ location: "2dsphere" });
 
 export const User = model(Schemas.USER, userSchema);

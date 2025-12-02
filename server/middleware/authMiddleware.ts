@@ -31,7 +31,7 @@ const authMiddleware = async (
   }
   try {
     const user = jwt.verify(token, ENVS.JWT_SECRET);
-    const userId = user?.id;
+    const userId = user?.userId;
     if (userId) {
       const userDetails = await User.findOne({ _id: userId });
       if (!userDetails) {

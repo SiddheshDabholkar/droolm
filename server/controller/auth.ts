@@ -6,7 +6,10 @@ import { User } from "./../models/user";
 import { Request, Response } from "express";
 
 const login = async (req: Request, res: Response) => {
-  const { googleId, emailId } = req.body;
+  const { googleToken } = req.body;
+  const { email: emailId, googleId } = await getUserDetails({
+    token: String(googleToken),
+  });
   const doesUserEists = await User.findOne({
     emailId,
     googleId,
@@ -44,7 +47,7 @@ const login = async (req: Request, res: Response) => {
 
 const register = async (req: Request, res: Response) => {
   const { googleToken } = req.body;
-  const { email, googleId } = await getUserDetails({
+  const { email, googleId, fullName } = await getUserDetails({
     token: String(googleToken),
   });
   const doesUserEists = await User.findOne({
@@ -63,6 +66,7 @@ const register = async (req: Request, res: Response) => {
   const createdUser = await User.create({
     emailId: email,
     googleId,
+    fullName,
   });
   const { token } = generateToken({
     userId: String(createdUser._id),
@@ -74,10 +78,10 @@ const register = async (req: Request, res: Response) => {
     {
       emailId: email,
       googleId,
-      preferenceId: createdPreference._id,
     },
     {
       token,
+      preferenceId: createdPreference._id,
     },
     { new: true }
   );

@@ -7,18 +7,19 @@ type TravelCategoryType = {
   description: string;
 } & TimeStampsAndId;
 
+type LocationType = {
+  type: "Point";
+  coordinates: [number, number];
+};
+
 type PreferenceType = {
   ageAbove: number;
   ageBelow: number;
   gender: GENDERS;
+  location: LocationType;
   userId: MaybeObjectId<UserType>;
   travelInterests: MaybeArray<MaybeObjectId<TravelCategoryType>>;
 } & TimeStampsAndId;
-
-type LocationType = {
-  type: "Point";
-  coordinates: [number, number]; // [longitude, latitude]
-};
 
 type UserType = {
   emailId: string;
@@ -30,9 +31,9 @@ type UserType = {
   phoneNumber: string;
   age: number;
   isOnline: boolean;
+  dateOfBirth: Date;
   isPhoneVerified: boolean;
   preferenceId: MaybeObjectId<PreferenceType>;
-  location: LocationType;
 } & TimeStampsAndId;
 
 export { UserType, PreferenceType, LocationType };

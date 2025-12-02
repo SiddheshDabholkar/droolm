@@ -10,6 +10,7 @@ const getUserDetails = async ({ token }: { token: string }) => {
     return {
       ...userInfo,
       googleId: userInfo.sub,
+      fullName: `${userInfo.given_name} ${userInfo.family_name}`,
     };
   } catch (error) {
     console.error("Something went wrong", error);
