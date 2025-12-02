@@ -5,6 +5,7 @@ enum Schemas {
   MATCH = "match",
   TRAVEL_CATEGORY = "travel_category",
   PREFERENCE = "preference",
+  CHAT = "chat",
 }
 
 export { Schemas };
