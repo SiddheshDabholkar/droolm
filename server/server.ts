@@ -12,6 +12,9 @@ import { createServer } from "http";
 
 const app = express();
 
+const server = createServer(app);
+const io = new Server(server);
+
 app.use(helmet());
 app.use(express.json());
 app.use(
@@ -25,17 +28,19 @@ app.use(limiter);
 app.use("/api", routes);
 app.use(errorMiddleware);
 
-const server = createServer(app);
-const io = new Server(server);
-
 mongoose
   .connect(ENVS.MONGODB_URL!)
   .then(() => {
     console.log("Connected to MongoDB");
-    app.listen(ENVS.PORT, () => {
-      configureSocket(io);
-      console.log("Listening on port", ENVS.PORT);
-    });
+    return server
+      .listen({ port: ENVS.PORT })
+      .addListener("listening", () => {
+        configureSocket(io);
+        console.log(`Server running at http://localhost:${ENVS.PORT}/`);
+      })
+      .addListener("error", (err) => {
+        console.log("err", err);
+      });
   })
   .catch((err) => {
     console.log(err);

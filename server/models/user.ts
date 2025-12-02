@@ -50,6 +50,10 @@ const userSchema = new Schema<UserType>(
     dateOfBirth: {
       type: Date,
     },
+    verifiedOtp: {
+      type: Schema.Types.ObjectId,
+      ref: Schemas.OTP,
+    },
   },
   { timestamps: true }
 );

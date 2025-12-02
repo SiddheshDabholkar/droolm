@@ -12,6 +12,13 @@ type LocationType = {
   coordinates: [number, number];
 };
 
+type OtpType = {
+  userId: MaybeObjectId<UserType>;
+  otp: string;
+  isUsed: boolean;
+  expiredAt: Date;
+} & TimeStampsAndId;
+
 type PreferenceType = {
   ageAbove: number;
   ageBelow: number;
@@ -33,7 +40,8 @@ type UserType = {
   isOnline: boolean;
   dateOfBirth: Date;
   isPhoneVerified: boolean;
+  verifiedOtp: MaybeObjectId<OtpType>;
   preferenceId: MaybeObjectId<PreferenceType>;
 } & TimeStampsAndId;
 
-export { UserType, PreferenceType, LocationType };
+export { UserType, PreferenceType, LocationType, OtpType };

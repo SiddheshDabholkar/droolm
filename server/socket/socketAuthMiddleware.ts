@@ -17,7 +17,7 @@ const socketAuthMiddleware = async (
   next: SocketNextFunction
 ) => {
   try {
-    const token = socket.handshake.auth?.token || socket.handshake.query?.token;
+    const token = socket.handshake.headers?.token;
     if (!token) {
       return next(new Error("Authentication error: Token not provided"));
     }

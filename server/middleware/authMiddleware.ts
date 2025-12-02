@@ -10,6 +10,7 @@ const authMiddleware = async (
   next: NextFunction
 ) => {
   const authHeader = req.headers.authorization;
+
   if (!authHeader) {
     return res.status(401).json(
       formatRes({
@@ -43,8 +44,22 @@ const authMiddleware = async (
           })
         );
       }
-      req.user = userDetails;
-      next();
+      const excludeUrls = ["/generate-otp", "/verify-otp"];
+      if (userDetails.isPhoneVerified) {
+        req.user = userDetails;
+        next();
+      } else if (excludeUrls.includes(req.url)) {
+        req.user = userDetails;
+        next();
+      } else {
+        return res.status(401).json(
+          formatRes({
+            message: "Please verify your phone number",
+            isError: true,
+            data: null,
+          })
+        );
+      }
     } else {
       return res.status(401).json(
         formatRes({

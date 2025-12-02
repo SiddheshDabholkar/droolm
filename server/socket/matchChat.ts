@@ -6,6 +6,16 @@ const matchChat = (io: Server) => {
     const userId = socket.user._id.toString();
     console.log(`Socket connected: ${socket.id}, User: ${userId}`);
 
+    const handleOffline = async () => {
+      try {
+        await User.findByIdAndUpdate(userId, { isOnline: false });
+        console.log(`User ${userId} disconnected and is now offline`);
+        socket.broadcast.emit("userOffline", { userId });
+      } catch (error) {
+        console.error("Error handling disconnect:", error);
+      }
+    };
+
     socket.on("setOnline", async () => {
       try {
         await User.findByIdAndUpdate(userId, { isOnline: true });
@@ -16,14 +26,12 @@ const matchChat = (io: Server) => {
       }
     });
 
+    socket.on("setOffline", async () => {
+      await handleOffline();
+    });
+
     socket.on("disconnect", async () => {
-      try {
-        await User.findByIdAndUpdate(userId, { isOnline: false });
-        console.log(`User ${userId} disconnected and is now offline`);
-        socket.broadcast.emit("userOffline", { userId });
-      } catch (error) {
-        console.error("Error handling disconnect:", error);
-      }
+      await handleOffline();
     });
   });
 };
