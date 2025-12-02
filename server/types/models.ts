@@ -1,4 +1,5 @@
 import { GENDERS } from "../constant/common";
+import { TimeStampsAndId } from "./common";
 
 type UserType = {
   emailId: string;
@@ -10,6 +11,6 @@ type UserType = {
   phoneNumber: string;
   isOnline: boolean;
   isPhoneVerified: boolean;
-};
+} & TimeStampsAndId;
 
 export { UserType };
